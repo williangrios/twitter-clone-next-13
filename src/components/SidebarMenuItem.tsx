@@ -4,7 +4,7 @@ interface SidebarMenuItemProps{
     href: string,
     caption: string,
     icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-    active: boolean;
+    active?: boolean;
 }
 
 export default function SidebarMenuItem(props: SidebarMenuItemProps) {

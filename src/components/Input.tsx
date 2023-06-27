@@ -7,7 +7,7 @@ export default function Input() {
     <div className="flex border-b border-gray-200 p-3 space-x-3">
         <Image src={''} alt="user img" className="rounded-full cursor-pointer hover:brightness-95 bg-slate-300 h-10 w-10"/>
         <div className="flex flex-col w-full divide-y divide-gray-200">
-            <textarea placeholder="What's happening" rows="3" className="w-full border-none  focus:ring-0 text-lg placeholder-gray-700 text-gray-700 tracking-wide min-h-[50px]"></textarea>
+            <textarea placeholder="What's happening" rows={3} className="w-full border-none  focus:ring-0 text-lg placeholder-gray-700 text-gray-700 tracking-wide min-h-[50px]"></textarea>
             <div className="flex py-3">
                 <PhotographIcon className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100"/>
                 <EmojiHappyIcon className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100"/>

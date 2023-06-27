@@ -6,7 +6,7 @@ export default function Sidebar() {
     
     
   return (
-    <div className="hidden sm:flex flex-col p-2 xl:items-start fixed h-full">
+    <div className="hidden sm:flex flex-col p-2 xl:items-start fixed h-full xl:ml-24">
         {/* logo */}
         <div className="hoverEffect hover:bg-blue-100 ">
             <Image src="https://s2-g1.glbimg.com/gVdcK1kqQtZE-LyBJX1DIpm3A-g=/0x0:1600x1302/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2022/n/v/RksT97TX2HRnLjAcW8Sw/twt.png" width={30} height={30}  alt="Twitter logo"></Image>
