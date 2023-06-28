@@ -8,7 +8,7 @@ import { db } from "../../firebase";
 
 export default function Feed() {
 
-  const [posts, setPost] = useState([createPost(0, "", "", "", "", '', '')]);
+  const [posts, setPost] = useState([createPost(0, "", "", "", "", '',  { seconds: 0, nanoseconds: 0 })]);
   useEffect(() => {
     const unsubscribe = onSnapshot(
       query(collection(db, "posts"), orderBy("timestamp", "desc")),
