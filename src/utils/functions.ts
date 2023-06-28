@@ -1,9 +1,12 @@
-export function createUser( uid ='' , name = '', userName = '', img = '', email = '') {
+export function createUser( uid ='' , name = '', userName = '', image = '', email = '', expires ='') {
     return {
-      userName,
-      name,
-      img,
-      email,
-      uid,
+      user:{
+        email,
+        image,
+        name,
+        uid,
+        userName,
+      },
+      expires
     };
   }

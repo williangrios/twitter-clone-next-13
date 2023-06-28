@@ -55,18 +55,29 @@ export default function Sidebar() {
           </button>
           {/* miniprofile */}
           <div className="hoverEffect text-gray-700 flex items-center justify-center xl:justify-start mt-auto space-x-2">
-            <Image src={session?.user?.image || ''} alt="user img" width={40} height={40}  className="rounded-full"/>
+            <Image
+              src={session?.user?.image || ""}
+              alt="user img"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
             <div className="leading-5 hidden xl:inline truncate max-w-[150px]">
-              <h4 className="font-bold truncate">{session?.user?.name || ''}</h4>
+              <h4 className="font-bold truncate">
+                {session?.user?.name || ""}
+              </h4>
               <p className="text-gray-500 rounded-full xl:mr-2 truncate">
-              {session?.user?.email || ''}
+                {session?.user?.email || ""}
               </p>
             </div>
             <DotsHorizontalIcon className="h-5 xl:ml-8 hidden xl:inline" />
           </div>
         </>
       ) : (
-        <button className="bg-blue-400 text-white rounded-full w-56 h-12 font-bold shadow-md hover:brightness-90 text-lg hidden xl:inline" onClick={() => signIn()}>
+        <button
+          className="bg-blue-400 text-white rounded-full w-56 h-12 font-bold shadow-md hover:brightness-90 text-lg hidden xl:inline"
+          onClick={() => signIn()}
+        >
           Sign in
         </button>
       )}
