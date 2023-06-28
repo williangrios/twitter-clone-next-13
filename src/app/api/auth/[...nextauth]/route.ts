@@ -27,7 +27,7 @@ const handler = NextAuth({
   pages: {
     signIn: "/signin",
   },
-  // secret: process.env.SECRET,
+  secret: process.env.SECRET,
   callbacks: {
     async session({
       session,
