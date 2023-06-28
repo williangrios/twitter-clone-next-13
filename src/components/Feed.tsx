@@ -1,23 +1,22 @@
-'use client'
+"use client";
 import { SparklesIcon } from "@heroicons/react/solid";
 import Input from "./Input";
 import Post from "./Post";
 import { useEffect, useState } from "react";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function Feed() {
-
-  const [posts, setPost] = useState([createPost(0, "", "", "", "", '',  { seconds: 0, nanoseconds: 0 })]);
+  const [posts, setPost] = useState([
+    createPost(0, "", "", "", "", "", { seconds: 0, nanoseconds: 0 }),
+  ]);
   useEffect(() => {
     const unsubscribe = onSnapshot(
       query(collection(db, "posts"), orderBy("timestamp", "desc")),
       (snapshot: any) => {
         setPost(
           snapshot.docs.map((post: any) =>
-          // console.log(post)
-          
-          // createPost(0, "", "", "", "", '', '')
             createPost(
               post.id,
               post.data().name,
@@ -25,7 +24,7 @@ export default function Feed() {
               post.data().userImage,
               post.data().image,
               post.data().text,
-              post.data().timestamp,
+              post.data().timestamp
             )
           )
         );
@@ -43,7 +42,7 @@ export default function Feed() {
     timestamp: {
       seconds: number;
       nanoseconds: number;
-    },
+    }
   ) {
     return {
       id,
@@ -56,7 +55,6 @@ export default function Feed() {
     };
   }
 
-
   return (
     <div className="xl:ml-[370px] border-l border-r border-gray-200 xl:min-w-[576px] sm:ml-[73px] flex-grow max-w-xl">
       <div className="flex py-2 px-3 sticky top-0 z-50 bg-white border-b border-gray-200 ">
@@ -66,9 +64,13 @@ export default function Feed() {
         </div>
       </div>
       <Input />
-      {posts.map((post) => (
-        <Post key={post.id} post={post} />
-      ))}
+      <AnimatePresence>
+        {posts.map((post) => (
+          <motion.div key={post.id} initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 1}}>
+            <Post  post={post} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 }
