@@ -7,6 +7,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/solid";
 import Image from "next/image";
+import Moment from "react-moment";
 
 interface PostProps {
   post: {
@@ -16,7 +17,10 @@ interface PostProps {
     userImage: string;
     img: string;
     text: string;
-    timestamp: string;
+    timestamp: {
+      seconds: number;
+      nanoseconds: number;
+    };
   };
 }
 
@@ -38,9 +42,17 @@ export default function Post({ post }: PostProps) {
               {post.name}
             </h4>
             <span className="text-sm sm:text-[15px]">@{post.userName} - </span>
-            <span className="text-sm sm:text-[15px] hover:underline">
+            <Moment fromNow>
+              {
+                new Date(
+                  post.timestamp?.seconds * 1000 +
+                    post.timestamp?.nanoseconds / 1000000
+                )
+              }
+            </Moment>
+            {/* <span className="text-sm sm:text-[15px] hover:underline">
               {post.timestamp}
-            </span>
+            </span> */}
           </div>
           {/* icone */}
           <DotsHorizontalIcon className="h-10 hoverEffect w-10 hover:bg-sky-100 hover:text-sky-500 ml-3" />

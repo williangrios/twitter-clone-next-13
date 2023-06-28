@@ -1,11 +1,37 @@
+'use client'
 import { SparklesIcon } from "@heroicons/react/solid";
-import React, { useState } from "react";
 import Input from "./Input";
 import Post from "./Post";
+import { useEffect, useState } from "react";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { db } from "../../firebase";
 
 export default function Feed() {
 
-  const [posts, setPosts] = useState
+  const [posts, setPost] = useState([createPost(0, "", "", "", "", '', '')]);
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, "posts"), orderBy("timestamp", "desc")),
+      (snapshot: any) => {
+        setPost(
+          snapshot.docs.map((post: any) =>
+          // console.log(post)
+          
+          // createPost(0, "", "", "", "", '', '')
+            createPost(
+              post.id,
+              post.data().name,
+              post.data().userName,
+              post.data().userImage,
+              post.data().image,
+              post.data().text,
+              post.data().timestamp,
+            )
+          )
+        );
+      }
+    );
+  }, []);
 
   function createPost(
     id: number,
@@ -14,7 +40,10 @@ export default function Feed() {
     userImage: string,
     img: string,
     text: string,
-    timestamp: string
+    timestamp: {
+      seconds: number;
+      nanoseconds: number;
+    },
   ) {
     return {
       id,
