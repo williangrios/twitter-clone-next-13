@@ -7,50 +7,75 @@ import {
   ShareIcon,
   TrashIcon,
 } from "@heroicons/react/solid";
-import { deleteDoc, doc, setDoc } from "firebase/firestore";
-import Image from "next/image";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import Moment from "react-moment";
 import { db, storage } from "../../firebase";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { deleteObject, ref } from "firebase/storage";
+import { useRecoilState } from "recoil";
+import { modalState, postIDState } from "@/atom/modalAtom";
+import { useEffect, useState } from "react";
+import { create } from "domain";
 
 interface PostProps {
   post: {
-    id: number;
+    id: string;
     name: string;
     userName: string;
     userImage: string;
     img: string;
     text: string;
-    timestamp: {
-      seconds: number;
-      nanoseconds: number;
-    };
+    seconds: number;
+    nanoseconds: number;
   };
 }
 
 export default function Post({ post }: PostProps) {
   const { data: session } = useSession();
+  const [open, setOpen] = useRecoilState(modalState);
+  const [postID, setPostID] = useRecoilState(postIDState);
+  const [comments, setComments] = useState([createComment()]);
 
   async function deletePost() {
     if (window.confirm("Are you sure?")) {
       deleteDoc(doc(db, "posts", post.id.toString()));
-      if(post.img){
+      if (post.img) {
         deleteObject(ref(storage, `posts/${post.id}/image`));
       }
     }
   }
+
+  function createComment(
+    comment = "",
+    name = "",
+    timestamp = "",
+    userImage = ""
+  ) {
+    return {
+      comment,
+      name,
+      timestamp,
+      userImage,
+    };
+  }
+
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(collection(db, "posts", post.id, "comments"), (snapshot) => {
+  //     const commentsData = snapshot.docs.map((doc) => {
+  //       const { comment, name, timsetamp, userImg } = doc.data();
+  //       return createComment(comment, name, timsetamp, userImg);
+  //     });
+  //     setComments(commentsData);
+  //   });
+  // }, [post.id]);
 
   return (
     <div className="flex p-3 cursor-pointer border-b border-b-gray-200">
       <img
         src={post.userImage}
         alt="user image"
-        //   width={48}
-        //   height={48}
         className="rounded-full h-11 w-11 mr-4"
       />
-
       <div className="w-full">
         <div className="flex items-center justify-between ">
           <div className="flex  space-x-1 whitespace-nowrap">
@@ -59,12 +84,7 @@ export default function Post({ post }: PostProps) {
             </h4>
             <span className="text-sm sm:text-[15px]">{post.userName} - </span>
             <Moment fromNow>
-              {
-                new Date(
-                  post.timestamp?.seconds * 1000 +
-                    post.timestamp?.nanoseconds / 1000000
-                )
-              }
+              {new Date(post.seconds * 1000 + post.nanoseconds / 1000000)}
             </Moment>
           </div>
           <DotsHorizontalIcon className="h-10 hoverEffect w-10 hover:bg-sky-100 hover:text-sky-500 ml-3" />
@@ -78,7 +98,23 @@ export default function Post({ post }: PostProps) {
           className="rounded-2xl mr-2 w-full"
         />
         <div className="flex justify-between text-gray-500 p-2">
-          <ChatIcon className="h-9  hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100" />
+          <div className="flex items-center select-none">
+            <ChatIcon
+              className="h-9  hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100"
+              onClick={() => {
+                if (!session) {
+                  signIn();
+                } else {
+                  setPostID(post.id);
+                  setOpen(!open);
+                }
+              }}
+            />
+            {comments.length > 0 && (
+              // <span>{comments.length}</span>
+              <span className="text-sm">4</span>
+            )}
+          </div>
           {session?.user?.email === post.userName && (
             <TrashIcon
               className="h-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100"

@@ -1,3 +1,4 @@
+import CommentModal from "@/components/CommentModal";
 import Feed from "@/components/Feed";
 import Sidebar from "@/components/Sidebar";
 import Widgets from "@/components/Widgets";
@@ -41,6 +42,7 @@ export default async function Home() {
       <Widgets articleList={articleList} followList={followList}/>
 
       {/* modal */}
+      <CommentModal />
     </main>
   );
 }

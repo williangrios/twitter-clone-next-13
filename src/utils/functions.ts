@@ -10,3 +10,26 @@ export function createUser( uid ='' , name = '', userName = '', image = '', emai
       expires
     };
   }
+
+
+  export function createPost(
+    id: string = '',
+    name: string = '',
+    userName: string = '',
+    userImage: string = '',
+    img: string = '',
+    text: string = '',
+    seconds: number = 0,
+    nanoseconds: number = 0
+  ) {
+    return {
+      id,
+      name,
+      userName,
+      userImage,
+      img,
+      text,
+      seconds,
+      nanoseconds
+    };
+  }

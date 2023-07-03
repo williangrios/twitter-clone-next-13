@@ -6,10 +6,11 @@ import { useEffect, useState } from "react";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
 import { AnimatePresence, motion } from "framer-motion";
+import { createPost } from "@/utils/functions";
 
 export default function Feed() {
   const [posts, setPost] = useState([
-    createPost(0, "", "", "", "", "", { seconds: 0, nanoseconds: 0 }),
+    createPost(''),
   ]);
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -24,36 +25,14 @@ export default function Feed() {
               post.data().userImage,
               post.data().image,
               post.data().text,
-              post.data().timestamp
+              post.data().timestamp.seconds,
+              post.data().timestamp.nanoseconds,
             )
           )
         );
       }
     );
   }, []);
-
-  function createPost(
-    id: number,
-    name: string,
-    userName: string,
-    userImage: string,
-    img: string,
-    text: string,
-    timestamp: {
-      seconds: number;
-      nanoseconds: number;
-    }
-  ) {
-    return {
-      id,
-      name,
-      userName,
-      userImage,
-      img,
-      text,
-      timestamp,
-    };
-  }
 
   return (
     <div className="xl:ml-[370px] border-l border-r border-gray-200 xl:min-w-[576px] sm:ml-[73px] flex-grow max-w-xl">

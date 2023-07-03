@@ -2,7 +2,7 @@
 import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
-// import { RecoilRoot } from "recoil";
+import { RecoilRoot } from "recoil";
 
 export default function Layout({
   children,
@@ -14,8 +14,9 @@ export default function Layout({
   return (
     <div>
       <SessionProvider session={session}>
-        {/* <RecoilRoot>{children}</RecoilRoot> */}
-        {children}
+        <RecoilRoot>
+          {children}
+        </RecoilRoot>
       </SessionProvider>
     </div>
   );
