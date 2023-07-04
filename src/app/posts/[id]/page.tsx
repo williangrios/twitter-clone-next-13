@@ -1,7 +1,18 @@
-import React from 'react'
+'use client'
+import { useSearchParams } from "next/navigation"
 
 export default function Post() {
+
+    const searchParams = useSearchParams();
+    console.log(searchParams);
+    
+    const  id  = searchParams.get('id')
+    console.log(id);
+    
+
   return (
-    <div>Post</div>
+    <div>
+        {id}teste
+    </div>
   )
 }

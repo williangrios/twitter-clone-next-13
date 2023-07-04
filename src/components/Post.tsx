@@ -59,15 +59,18 @@ export default function Post({ post }: PostProps) {
     };
   }
 
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(collection(db, "posts", post.id, "comments"), (snapshot) => {
-  //     const commentsData = snapshot.docs.map((doc) => {
-  //       const { comment, name, timsetamp, userImg } = doc.data();
-  //       return createComment(comment, name, timsetamp, userImg);
-  //     });
-  //     setComments(commentsData);
-  //   });
-  // }, [post.id]);
+  useEffect(() => {
+    console.log(post.id.toString());
+    
+    const unsubscribe = onSnapshot(collection(db, "posts", post.id.toString(), "comments"), (snapshot) => {
+      let commentsData = [];
+      commentsData = snapshot.docs.map((doc) => {
+        const { comment, name, timsetamp, userImg } = doc.data();
+        return createComment(comment, name, timsetamp, userImg);
+      });
+      setComments(commentsData);
+    });
+  }, [post.id]);
 
   return (
     <div className="flex p-3 cursor-pointer border-b border-b-gray-200">
@@ -110,10 +113,7 @@ export default function Post({ post }: PostProps) {
                 }
               }}
             />
-            {comments.length > 0 && (
-              // <span>{comments.length}</span>
-              <span className="text-sm">4</span>
-            )}
+            <span>{comments.length}</span>
           </div>
           {session?.user?.email === post.userName && (
             <TrashIcon
