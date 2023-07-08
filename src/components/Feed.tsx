@@ -9,14 +9,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { createPost } from "@/utils/functions";
 
 export default function Feed() {
-  const [posts, setPost] = useState([
-    // createPost(''),
-  ]);
+  const [posts, setPosts] = useState([]);
   useEffect(() => {
     const unsubscribe = onSnapshot(
       query(collection(db, "posts"), orderBy("timestamp", "desc")),
       (snapshot: any) => {
-        setPost(
+        setPosts(
           snapshot.docs.map((post: any) =>
             createPost(
               post.id,

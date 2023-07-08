@@ -16,6 +16,7 @@ import { useRecoilState } from "recoil";
 import { modalState, postIDState } from "@/atom/modalAtom";
 import { useEffect, useState } from "react";
 import { create } from "domain";
+import { createComment } from "@/utils/functions";
 
 interface PostProps {
   post: {
@@ -45,31 +46,19 @@ export default function Post({ post }: PostProps) {
     }
   }
 
-  function createComment(
-    comment = "",
-    name = "",
-    timestamp = "",
-    userImage = ""
-  ) {
-    return {
-      comment,
-      name,
-      timestamp,
-      userImage,
-    };
-  }
-
   useEffect(() => {
-    console.log(post.id.toString());
-    
-    const unsubscribe = onSnapshot(collection(db, "posts", post.id.toString(), "comments"), (snapshot) => {
-      let commentsData = [];
-      commentsData = snapshot.docs.map((doc) => {
-        const { comment, name, timsetamp, userImg } = doc.data();
-        return createComment(comment, name, timsetamp, userImg);
-      });
-      setComments(commentsData);
-    });
+    if (!post.id) return;
+    const unsubscribe = onSnapshot(
+      collection(db, "posts", post.id.toString(), "comments"),
+      (snapshot) => {
+        let commentsData = [];
+        commentsData = snapshot.docs.map((doc) => {
+          const { comment, name, timsetamp, userImg } = doc.data();
+          return createComment(comment, name, timsetamp, userImg);
+        });
+        setComments(commentsData);
+      }
+    );
   }, [post.id]);
 
   return (

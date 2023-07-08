@@ -4,71 +4,73 @@ import { modalState, postIDState } from "../atom/modalAtom";
 import Modal from "react-modal";
 import { EmojiHappyIcon, PhotographIcon, XIcon } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
-import { addDoc, collection, doc, onSnapshot, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 import { createPost, createUser } from "@/utils/functions";
 import Moment from "react-moment";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import {useRouter} from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 export default function CommentModal() {
-  const [open, setOpen] = useRecoilState(modalState);
   const [postID, setPostID] = useRecoilState(postIDState);
+  const [open, setOpen] = useRecoilState(modalState);
   const [post, setPost] = useState(createPost(""));
   const [input, setInput] = useState("");
   const [user, setUser] = useState(createUser());
   const { data: session } = useSession();
   const router = useRouter();
 
-  // useEffect(() => {
-  //   console.log(postID);
-    
-  //   onSnapshot(doc(db, "posts", postID), (snapshot) => {
-  //     setPost(
-  //       createPost(
-  //         postID,
-  //         // snapshot.data()?.name || "",
-  //         // snapshot.data()?.userName || "",
-  //         // snapshot.data()?.userImage || "",
-  //         // snapshot.data()?.image || "",
-  //         // snapshot.data()?.text || "",
-  //         // snapshot.data()?.timestamp.seconds || "",
-  //         // snapshot.data()?.timestamp.nanoseconds || ""
-  //       )
-  //     );
-      
-  //   });
-    
-  //   let email = "";
-  //   let expires = "";
-  //   let name = "";
-  //   let image = "";
-  //   if (session){
-  //     email = 'session?.user?.email' || "",
-  //     expires = session?.expires,
-  //     name = session?.user?.name || "",
-  //     image = session?.user?.image || ""
-  //   }
-  //   setUser(createUser(email, name, email, image, email, expires));
+  useEffect(() => {
+    if (!postID) return;
+    onSnapshot(doc(db, "posts", postID), (snapshot) => {
+      setPost(
+        createPost(
+          postID,
+          snapshot.data()?.name || "",
+          snapshot.data()?.userName || "",
+          snapshot.data()?.userImage || "",
+          snapshot.data()?.image || "",
+          snapshot.data()?.text || "",
+          snapshot.data()?.timestamp.seconds || "",
+          snapshot.data()?.timestamp.nanoseconds || ""
+        )
+      );
+    });
 
-  // }, [postID, session, setPostID]);
+    let email = "";
+    let expires = "";
+    let name = "";
+    let image = "";
+    if (session) {
+      (email = "session?.user?.email" || ""),
+        (expires = session?.expires),
+        (name = session?.user?.name || ""),
+        (image = session?.user?.image || "");
+    }
+    setUser(createUser(email, name, email, image, email, expires));
+  }, [postID, session]);
 
-  async function sendComment(){
-    await addDoc(collection(db, 'posts', postID.toString(), 'comments'), {
+  async function sendComment() {
+    await addDoc(collection(db, "posts", postID.toString(), "comments"), {
       comment: input,
       name: session?.user?.name,
       userImg: session?.user?.image,
-      timestamp: serverTimestamp()
-    })
+      timestamp: serverTimestamp(),
+    });
     setOpen(false);
-    setInput('');
-    router.push(`posts/${postID}`)
+    setInput("");
+    router.push(`posts/${postID}`);
   }
 
   return (
     <div>
-
       {open && (
         <Modal
           isOpen={open}
@@ -77,7 +79,6 @@ export default function CommentModal() {
             "p-2 max-w-lg w-[90%] absolute top-24 left-[50%] translate-x-[-50%] bg-white border-2 border-gray-200 outline-none rounded-xl shadow-md "
           }
         >
-          {postID}
           <div className=" border-b border-gray-200 ">
             <div
               className="bg-slate-100 hoverEffect w-10 h-10 flex items-center justify-center"
@@ -103,7 +104,9 @@ export default function CommentModal() {
               {new Date(post.seconds * 1000 + post.nanoseconds / 1000000)}
             </Moment>
           </div>
-          <p className="text-gray-500 text-[15px] sm:text-[16px] ml-16 mb-2">{post?.text}</p>
+          <p className="text-gray-500 text-[15px] sm:text-[16px] ml-16 mb-2">
+            {post?.text}
+          </p>
           <div className="">
             <>
               <div className="flex p-3 space-x-3">
@@ -139,28 +142,28 @@ export default function CommentModal() {
                       />
                     </div>
                   )} */}
-                    <div className="flex py-3">
-                      {/* <div className="" onClick={() => filePickerRef.current.click()}> */}
-                      {/* <PhotographIcon
+                  <div className="flex py-3">
+                    {/* <div className="" onClick={() => filePickerRef.current.click()}> */}
+                    {/* <PhotographIcon
                         className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100"
                         onClick={() => filePickerRef.current?.click()}
                       /> */}
-                      {/* <input
+                    {/* <input
                         type="file"
                         hidden
                         ref={filePickerRef}
                         onChange={addImageRef}
                       /> */}
-                      {/* </div> */}
-                      <EmojiHappyIcon className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100" />
-                      <button
-                        className="bg-blue-400 ml-auto rounded-full text-white px-4 py-2 font-bold shadow-md hover:brightness-95 disabled:opacity-50"
-                        disabled={!input.trim()}
-                        onClick={() => sendComment()}
-                      >
-                        Tweet
-                      </button>
-                    </div>
+                    {/* </div> */}
+                    <EmojiHappyIcon className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100" />
+                    <button
+                      className="bg-blue-400 ml-auto rounded-full text-white px-4 py-2 font-bold shadow-md hover:brightness-95 disabled:opacity-50"
+                      disabled={!input.trim()}
+                      onClick={() => sendComment()}
+                    >
+                      Tweet
+                    </button>
+                  </div>
                 </div>
               </div>
             </>

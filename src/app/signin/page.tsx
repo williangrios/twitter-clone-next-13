@@ -9,10 +9,6 @@ import {
 import { useEffect, useState } from "react";
 
 export default function SignIn() {
-  // const providers = await getProviders();
-
-  // console.log(providers);
-
   const [providers, setProviders] = useState<Record<
     LiteralUnion<BuiltInProviderType, string>,
     ClientSafeProvider
@@ -40,7 +36,10 @@ export default function SignIn() {
       <div className="flex flex-col items-center w-1/2 md:w-1/2 justify-start md:pl-10 ">
         {providers &&
           Object.values(providers).map((provider, i) => (
-            <div key={i} className="flex flex-col justify-center md:justify-start w-full items-center">
+            <div
+              key={i}
+              className="flex flex-col justify-center md:justify-start w-full items-center"
+            >
               <img
                 width="350px"
                 src="https://www.gov.br/mj/pt-br/assuntos/seus-direitos/classificacao-1/paginas-classificacao-indicativa/twitter.png"

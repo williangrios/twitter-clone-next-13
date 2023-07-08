@@ -33,3 +33,39 @@ export function createUser( uid ='' , name = '', userName = '', image = '', emai
       nanoseconds
     };
   }
+
+  export function createArticle(
+    title: string = '',
+    date: string= '',
+    urlToImage: string= '',
+    url: string = ''
+  ) {
+    return {
+      title,
+      date,
+      urlToImage,
+      url,
+    };
+  }
+
+  export function createFollow(name: string = '', userName: string= '', picture: string = '') {
+    return {
+      picture,
+      name,
+      userName,
+    };
+  }
+
+  export function createComment(
+    comment:string = "",
+    name:string = "",
+    timestamp:string = "",
+    userImage:string = ""
+  ) {
+    return {
+      comment,
+      name,
+      timestamp,
+      userImage,
+    };
+  }
